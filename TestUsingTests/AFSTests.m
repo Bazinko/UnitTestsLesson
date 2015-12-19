@@ -12,6 +12,7 @@
 #import "TUSEmployee.h"
 #import <Expecta/Expecta.h>
 #import "TUSCompany.h"
+#import "TUSTaxman.h"
 
 @interface TUSEmployee()
 
@@ -56,6 +57,30 @@ describe(@"my tests", ^{
         [company payToEmployee:mock];
         
         OCMVerifyAllWithDelay(mock, 0.5);
+    });
+    
+    it(@"paying taxes by company/employer", ^{
+        id taxesProviderProtocol = OCMProtocolMock(@protocol(TUSTaxesProvider));
+        [OCMStub([taxesProviderProtocol baseTaxes]) andReturn:@1];
+        [OCMStub([taxesProviderProtocol retireInsuranceTaxes]) andReturn:@10];
+        
+        TUSCompany *company = [TUSCompany new];
+        company.taxesProvider = taxesProviderProtocol;
+        company.totalAmount = @100;
+        
+        TUSTaxman *companyTaxman = [TUSTaxman new];
+        company.taxman = companyTaxman;
+        
+        employee.taxesProvider = taxesProviderProtocol;
+        employee.currentSalary = @10;
+        employee.totalAmount = @0;
+        
+        employee.taxman = companyTaxman;
+        
+        [company payToEmployee:employee];
+        
+        expect(company.totalAmount).equal(@80);
+        expect(employee.totalAmount).equal(@9);
     });
 
     

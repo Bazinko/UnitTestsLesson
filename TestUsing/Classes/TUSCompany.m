@@ -8,12 +8,16 @@
 
 #import "TUSCompany.h"
 #import "TUSEmployee.h"
+#import "TUSTaxman.h"
 
 @implementation TUSCompany
 
 - (void)payToEmployee:(TUSEmployee *)employee {
     [employee takeMoney:employee.currentSalary ];
-    //...
+    NSDecimalNumber *tax = [self.taxesProvider retireInsuranceTaxes];
+    [self.taxman receiveTaxes:tax sender:self];
+    
+    self.totalAmount = @(self.totalAmount.doubleValue - employee.currentSalary.doubleValue - tax.doubleValue);
 }
 
 @end

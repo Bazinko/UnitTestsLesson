@@ -7,6 +7,7 @@
 //
 
 #import "TUSEmployee.h"
+#import "TUSTaxman.h"
 
 @implementation TUSEmployee
 
@@ -31,7 +32,8 @@
 
 - (void)takeMoney:(NSNumber *)amount
 {
-    //...
+    self.totalAmount = @(self.totalAmount.doubleValue + amount.doubleValue);
+    [self payTaxes];
 }
 
 - (void)setCurrentSalary:(NSNumber *)currentSalary
@@ -42,8 +44,12 @@
     self.salaryHistory = [arr copy];
 }
 
-- (void)payTaxes {
-    //...
+- (void)payTaxes
+{
+    NSDecimalNumber *tax = [self.taxesProvider baseTaxes];
+    [self.taxman receiveTaxes:tax sender:self];
+    
+    self.totalAmount = @(self.totalAmount.doubleValue - tax.doubleValue);
 }
 
 @end
