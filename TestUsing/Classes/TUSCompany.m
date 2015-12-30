@@ -17,7 +17,7 @@
     NSDecimalNumber *tax = [self.taxesProvider retireInsuranceTaxes];
     [self.taxman receiveTaxes:tax sender:self];
     
-    self.totalAmount = @(self.totalAmount.doubleValue - employee.currentSalary.doubleValue - tax.doubleValue);
+    self.totalAmount = @([self.totalAmount floatValue] - [employee.currentSalary floatValue] - [tax floatValue]);
 }
 
 @end

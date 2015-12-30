@@ -59,28 +59,27 @@ describe(@"my tests", ^{
         OCMVerifyAllWithDelay(mock, 0.5);
     });
     
-    it(@"paying taxes by company/employer", ^{
+    it(@"paying taxes", ^{
         id taxesProviderProtocol = OCMProtocolMock(@protocol(TUSTaxesProvider));
-        [OCMStub([taxesProviderProtocol baseTaxes]) andReturn:@1];
-        [OCMStub([taxesProviderProtocol retireInsuranceTaxes]) andReturn:@10];
+        [OCMStub([taxesProviderProtocol baseTaxes]) andReturn:@11];
+        [OCMStub([taxesProviderProtocol retireInsuranceTaxes]) andReturn:@37];
         
         TUSCompany *company = [TUSCompany new];
         company.taxesProvider = taxesProviderProtocol;
-        company.totalAmount = @100;
+        company.totalAmount = @1000;
         
-        TUSTaxman *companyTaxman = [TUSTaxman new];
-        company.taxman = companyTaxman;
+        TUSTaxman *taxman = [TUSTaxman new];
+        company.taxman = taxman;
+        employee.taxman = taxman;
         
         employee.taxesProvider = taxesProviderProtocol;
-        employee.currentSalary = @10;
+        employee.currentSalary = @100;
         employee.totalAmount = @0;
-        
-        employee.taxman = companyTaxman;
         
         [company payToEmployee:employee];
         
-        expect(company.totalAmount).equal(@80);
-        expect(employee.totalAmount).equal(@9);
+        expect(company.totalAmount).equal(@863);
+        expect(employee.totalAmount).equal(@89);
     });
 
     

@@ -32,7 +32,7 @@
 
 - (void)takeMoney:(NSNumber *)amount
 {
-    self.totalAmount = @(self.totalAmount.doubleValue + amount.doubleValue);
+    self.totalAmount = @([self.totalAmount floatValue] + [amount floatValue]);
     [self payTaxes];
 }
 
@@ -49,7 +49,7 @@
     NSDecimalNumber *tax = [self.taxesProvider baseTaxes];
     [self.taxman receiveTaxes:tax sender:self];
     
-    self.totalAmount = @(self.totalAmount.doubleValue - tax.doubleValue);
+    self.totalAmount = @([self.totalAmount floatValue] - [tax floatValue]);
 }
 
 @end

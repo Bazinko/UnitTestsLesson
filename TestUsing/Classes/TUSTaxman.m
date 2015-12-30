@@ -11,7 +11,7 @@
 @implementation TUSTaxman
 
 - (void)receiveTaxes:(NSDecimalNumber *)taxes sender:(id)sender {
-    NSMutableArray *arr = [self.records mutableCopy];
+    NSMutableDictionary *arr = [self.records mutableCopy];
     self.records = [arr copy];
 }
 
